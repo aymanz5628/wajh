@@ -1,0 +1,129 @@
+.socialShare {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+.label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.shareBtn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.shareBtn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.shareBtn:hover {
+    transform: translateY(-5px) scale(1.1);
+    border-color: transparent;
+    color: #FFFFFF !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.shareBtn:hover::before {
+    opacity: 1;
+}
+
+.shareBtn svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.shareBtn:hover svg {
+    transform: scale(1.1);
+}
+
+/* Platform-specific colors */
+.twitter::before {
+    background: linear-gradient(135deg, #1DA1F2, #0D8BD9);
+}
+
+.twitter:hover {
+    box-shadow: 0 15px 35px rgba(29, 161, 242, 0.4);
+}
+
+.facebook::before {
+    background: linear-gradient(135deg, #1877F2, #0D65D9);
+}
+
+.facebook:hover {
+    box-shadow: 0 15px 35px rgba(24, 119, 242, 0.4);
+}
+
+.linkedin::before {
+    background: linear-gradient(135deg, #0A66C2, #004182);
+}
+
+.linkedin:hover {
+    box-shadow: 0 15px 35px rgba(10, 102, 194, 0.4);
+}
+
+.whatsapp::before {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.whatsapp:hover {
+    box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+}
+
+/* Divider line */
+.divider {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+    margin: 0 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .socialShare {
+        gap: 12px;
+        padding: 15px 0;
+    }
+    
+    .label {
+        display: none;
+    }
+    
+    .divider {
+        display: none;
+    }
+    
+    .shareBtn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .shareBtn svg {
+        width: 18px;
+        height: 18px;
+    }
+}

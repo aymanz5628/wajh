@@ -1,0 +1,235 @@
+/* ========================================
+   Gallery Carousel - Horizontally Scrollable
+   Active item emphasized via scale, elevation, layering
+   All sizes use vw units for uniform proportional scaling
+   ======================================== */
+
+.section {
+    padding: 5.3vw 0 6.6vw;
+    background-color: var(--surface);
+    overflow: hidden;
+    position: relative;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.6vw;
+}
+
+/* Section Header */
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 3.2vw;
+}
+
+.sectionTitle {
+    font-size: clamp(20px, 2.8vw, 42px);
+    font-weight: 800;
+    color: var(--text-primary, #1a1a1a);
+    margin-bottom: 0.8vw;
+    letter-spacing: -0.5px;
+}
+
+.sectionSubtitle {
+    font-size: clamp(12px, 1.06vw, 16px);
+    color: var(--text-secondary, #666);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Carousel Wrapper */
+.carouselWrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 31.7vw;
+    perspective: 1200px;
+}
+
+/* Cards Container - 3D Stack */
+.cardsContainer {
+    position: relative;
+    width: 100%;
+    height: 29.8vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Individual Card — proportional to viewport */
+.card {
+    position: absolute;
+    width: 21.2vw;
+    height: 27.8vw;
+    border-radius: 1.3vw;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 0.5vw 2vw rgba(0, 0, 0, 0.15);
+    will-change: transform, opacity;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.card:hover {
+    box-shadow: 0 1.3vw 4vw rgba(0, 0, 0, 0.3);
+}
+
+/* Active Card - Elevated & Scaled */
+.cardActive {
+    z-index: 10 !important;
+    box-shadow: 0 1.65vw 4.6vw rgba(0, 0, 0, 0.35);
+}
+
+.cardActive:hover {
+    box-shadow: 0 2vw 5.3vw rgba(0, 0, 0, 0.4);
+}
+
+/* Card Image */
+.cardImage {
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card:hover .cardImage {
+    transform: scale(1.08);
+}
+
+/* Card Overlay Gradient */
+.cardOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        transparent 100%
+    );
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Card Content */
+.cardContent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.6vw;
+    z-index: 3;
+    color: #fff;
+    pointer-events: none;
+}
+
+.cardCaption {
+    font-size: clamp(10px, 1.06vw, 16px);
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+/* Navigation Arrows — proportional */
+.navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.4vw;
+    height: 3.4vw;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-primary, #333);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s ease;
+}
+
+.navButton:hover {
+    background: var(--primary-green, #1a5f48);
+    border-color: var(--primary-green, #1a5f48);
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 25px rgba(26, 95, 72, 0.4);
+}
+
+.navPrev {
+    left: 1.3vw;
+}
+
+.navNext {
+    right: 1.3vw;
+}
+
+/* Dots Indicator */
+.dotsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 0.66vw;
+    margin-top: 2.4vw;
+}
+
+.dot {
+    width: clamp(6px, 0.66vw, 10px);
+    height: clamp(6px, 0.66vw, 10px);
+    border-radius: 50%;
+    background: var(--text-secondary, #ccc);
+    opacity: 0.4;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+}
+
+.dot:hover {
+    opacity: 0.7;
+    transform: scale(1.2);
+}
+
+.dotActive {
+    opacity: 1;
+    background: var(--primary-green, #1a5f48);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(26, 95, 72, 0.4);
+}
+
+/* Gallery Link */
+.galleryLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2.6vw;
+    text-decoration: none;
+    color: var(--primary-green, #1a5f48);
+    font-size: clamp(14px, 1.2vw, 18px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.galleryLink:hover {
+    gap: 12px;
+    color: var(--primary-green-dark, #145040);
+}
+
+.galleryLink svg {
+    transition: transform 0.3s ease;
+}
+
+.galleryLink:hover svg {
+    transform: translateX(4px) translateY(-4px);
+}

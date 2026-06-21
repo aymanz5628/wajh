@@ -1,0 +1,127 @@
+.card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* Mobile tap feedback */
+@media (hover: none) {
+    .card:active {
+        transform: scale(0.97);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.cardLink {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+.imageContainer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.image {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.05);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(13, 21, 38, 0.85) 0%,
+        rgba(13, 21, 38, 0.4) 40%,
+        rgba(13, 21, 38, 0.1) 70%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+.content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--gold), #B8962E);
+    color: #0D1526;
+    border: none;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    letter-spacing: 0.03em;
+    width: fit-content;
+    box-shadow: 0 3px 12px rgba(201, 168, 76, 0.35);
+    transition: all 0.3s ease;
+}
+
+.card:hover .category {
+    background: linear-gradient(135deg, var(--royal-blue), var(--deep-navy));
+    color: white;
+    box-shadow: 0 5px 18px rgba(43, 75, 160, 0.45);
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #ffffff;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.excerpt {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .card {
+        border-radius: 14px;
+    }
+    .title { font-size: 15px; }
+    .content { padding: 16px; gap: 6px; }
+    .excerpt { display: none; }
+    .category { font-size: 10px; padding: 3px 10px; }
+}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="52" height="52">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A2744"/>
+      <stop offset="100%" style="stop-color:#0D1526"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#D97706"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="52" height="52" rx="14" fill="url(#bg)"/>
+  
+  <!-- Stylized W / Waw (و) representing communication & PR -->
+  <g transform="translate(13, 11)">
+    <!-- Main loop of the Waw (و) / communication ring -->
+    <circle cx="13" cy="11" r="7" stroke="url(#gold)" stroke-width="3" fill="none" opacity="0.95"/>
+    <!-- Tail of the Waw / sweeping PR network curve -->
+    <path d="M 13 18 C 13 25, 4 28, 1 20" fill="none" stroke="url(#gold)" stroke-width="3" stroke-linecap="round" opacity="0.95"/>
+    <!-- Signal waves indicating broadcasting/influence (PR) -->
+    <path d="M 21 5 A 12 12 0 0 1 25 15" fill="none" stroke="url(#blue)" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 23 1 A 17 17 0 0 1 28 15" fill="none" stroke="url(#blue)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+</svg>

@@ -1,0 +1,251 @@
+/* Premium Homepage Layout */
+.main {
+    background: var(--background);
+    min-height: 100vh;
+}
+
+.heroSection {
+    margin-bottom: var(--space-6);
+}
+
+.mosaicSection {
+    padding: var(--space-6) 0;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+}
+
+.sectionTitle {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+}
+
+.sectionTitle::before,
+.sectionTitle::after {
+    content: '';
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-green), var(--deep-green));
+    border-radius: 2px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--space-5);
+}
+
+.span4 { grid-column: span 4; }
+.span6 { grid-column: span 6; }
+.span8 { grid-column: span 8; }
+.span12 { grid-column: span 12; }
+
+.span8>div, .span6>div {
+    min-height: 380px;
+}
+
+/* Series Sections */
+.seriesSection {
+    padding: var(--space-6) 0;
+    position: relative;
+    overflow: hidden;
+    margin-top: var(--space-6);
+}
+
+.seriesHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+}
+
+.seriesTitle {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+}
+
+.seriesTitle::before,
+.seriesTitle::after {
+    content: '';
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-green), var(--deep-green));
+    border-radius: 2px;
+}
+
+.seriesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--space-5);
+}
+
+.seriesCard {
+    position: relative;
+    aspect-ratio: 2/3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: #000;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.seriesCard:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+}
+
+@media (hover: none) {
+    .seriesCard:active {
+        transform: scale(0.97);
+    }
+}
+
+.seriesImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.seriesCard:hover .seriesImage {
+    transform: scale(1.05);
+}
+
+.seriesOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+}
+
+.seriesContent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--space-5);
+}
+
+.seriesCardTitle {
+    color: white;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.playIcon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.35s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.seriesCard:hover .playIcon {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* Parallax Section */
+.parallaxSection {
+    padding: var(--space-6) 0;
+    background: var(--snow);
+    margin: var(--space-4) 0;
+}
+
+.parallaxGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    padding: var(--space-4) 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.parallaxCardWrapper {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .heroSection {
+        margin-bottom: var(--space-4);
+    }
+    
+    .seriesSection {
+        padding: var(--space-5) 0;
+        margin-top: var(--space-5);
+    }
+    
+    .seriesGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--space-3);
+    }
+    
+    .parallaxSection {
+        padding: var(--space-5) 0;
+        margin: var(--space-3) 0;
+    }
+    
+    .parallaxGrid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .sectionTitle,
+    .seriesTitle {
+        font-size: var(--text-xl);
+    }
+    
+    .sectionTitle::before,
+    .sectionTitle::after,
+    .seriesTitle::before,
+    .seriesTitle::after {
+        width: 30px;
+    }
+    
+    .sectionHeader,
+    .seriesHeader {
+        margin-bottom: var(--space-4);
+    }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .5;
+    transform: scale(0.95);
+  }
+}

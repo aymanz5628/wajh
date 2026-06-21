@@ -1,0 +1,116 @@
+.body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 0 64px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.body p {
+  margin-bottom: 24px;
+}
+
+.body h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-top: 40px;
+  margin-bottom: 24px;
+}
+
+.imageWrapper {
+  margin: 40px 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.content {
+  padding: 0 20px;
+}
+
+.noContent {
+  text-align: center;
+  color: #888;
+  padding: 40px;
+}
+
+/* RAW HTML CONTENT - FULL PAGE / FULL WIDTH */
+.rawHtmlContent {
+  /* Break out of parent container for full width */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  /* Reset constraints */
+  max-width: none;
+  padding: 0;
+  
+  /* Allow all CSS properties */
+  font-family: inherit;
+  direction: rtl;
+  
+  /* Allow overflow for animations */
+  overflow: visible;
+}
+
+/* Allow scoped styles inside raw HTML */
+.rawHtmlContent style {
+  display: block;
+}
+
+/* Common elements in raw HTML - minimal styling to not interfere */
+.rawHtmlContent h1,
+.rawHtmlContent h2,
+.rawHtmlContent h3,
+.rawHtmlContent h4,
+.rawHtmlContent h5,
+.rawHtmlContent h6 {
+  font-weight: 700;
+}
+
+.rawHtmlContent img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rawHtmlContent a {
+  color: inherit;
+}
+
+/* Allow animations to work without restriction */
+.rawHtmlContent * {
+  animation-duration: inherit;
+  animation-timing-function: inherit;
+  transition: inherit;
+}
+
+/* ===== IMMERSIVE MODE FOR RAW HTML ARTICLES ===== */
+
+/* Hide parent article wrapper white background */
+.rawHtmlContent {
+    /* Make it take full viewport */
+    margin-top: 0; /* Pull up to cover header area */
+    padding-top: 0;
+}
+
+/* Dark background for immersive experience */
+:global(.immersive-article) {
+    background: #0a0a0a !important;
+    min-height: 100vh;
+}
+
+/* Hide the default article header when rawHtml is used */
+:global(.immersive-article) :global(.article-header) {
+    display: none !important;
+}

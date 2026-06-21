@@ -1,0 +1,26 @@
+/* ===== SCROLL PROGRESS BAR ===== */
+.progressContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 9999;
+    background: transparent;
+    pointer-events: none;
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        #1A2744 0%,
+        #2B4BA0 30%,
+        #C9A84C 70%,
+        #2B4BA0 100%
+    );
+    box-shadow: 0 0 10px rgba(43, 75, 160, 0.5),
+                0 0 20px rgba(43, 75, 160, 0.3);
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+}
