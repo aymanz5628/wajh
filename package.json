@@ -1,0 +1,9 @@
+{
+  "name": "wajh-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "strapi": "^5.42.1",
+    "@strapi/strapi": "^5.42.1"
+  }
+}
