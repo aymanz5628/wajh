@@ -51,10 +51,9 @@ export default function Header() {
 
     const navLinks = [
         { href: '/', label: t('nav.home'), exact: true },
-        { href: '/category/pr', label: t('category.pr') },
-        { href: '/category/crisis', label: t('category.crisis') },
-        { href: '/#programs', label: t('nav.services') },
-        { href: '/#documentaries', label: t('nav.cases') },
+        { href: '/category/topics', label: t('nav.topics') },
+        { href: '/#programs', label: t('nav.programs') },
+        { href: '/#documentaries', label: t('nav.documentaries') },
         { href: '/gallery', label: t('nav.gallery') },
     ];
 

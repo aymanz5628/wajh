@@ -2,10 +2,9 @@ export const translations = {
   ar: {
     // Navigation
     "nav.home": "الرئيسية",
-    "nav.services": "الخدمات",
     "nav.topics": "المواضيع",
-    "nav.cases": "حالات النجاح",
-    "nav.insights": "المقالات",
+    "nav.programs": "البرامج",
+    "nav.documentaries": "الوثائقيات",
     "nav.gallery": "المعرض",
     "nav.search": "ابحث...",
 
@@ -19,8 +18,8 @@ export const translations = {
     // Sections
     "section.latestTopics": "أحدث المواضيع",
     "section.mostViewed": "الأكثر مشاهدة",
-    "section.programs": "خدماتنا",
-    "section.documentaries": "حالات النجاح",
+    "section.programs": "البرامج",
+    "section.documentaries": "الوثائقيات",
     "section.gallery": "المعرض",
 
     // Gallery
@@ -72,10 +71,9 @@ export const translations = {
   en: {
     // Navigation
     "nav.home": "Home",
-    "nav.services": "Services",
     "nav.topics": "Topics",
-    "nav.cases": "Success Cases",
-    "nav.insights": "Insights",
+    "nav.programs": "Programs",
+    "nav.documentaries": "Documentaries",
     "nav.gallery": "Gallery",
     "nav.search": "Search...",
 
@@ -89,8 +87,8 @@ export const translations = {
     // Sections
     "section.latestTopics": "Latest Topics",
     "section.mostViewed": "Most Viewed",
-    "section.programs": "Our Services",
-    "section.documentaries": "Success Cases",
+    "section.programs": "Programs",
+    "section.documentaries": "Documentaries",
     "section.gallery": "Gallery",
 
     // Gallery

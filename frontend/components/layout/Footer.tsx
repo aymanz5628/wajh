@@ -54,8 +54,7 @@ export default function Footer() {
                         <h4 className={styles.colTitle}>{isAr ? 'روابط سريعة' : 'Quick Links'}</h4>
                         <nav className={styles.colLinks}>
                             <Link href="/" className={styles.link}>{isAr ? 'الرئيسية' : 'Home'}</Link>
-                            <Link href="/category/pr" className={styles.link}>{isAr ? 'علاقات عامة' : 'PR'}</Link>
-                            <Link href="/category/crisis" className={styles.link}>{isAr ? 'إدارة أزمات' : 'Crisis Management'}</Link>
+                            <Link href="/category/topics" className={styles.link}>{isAr ? 'المواضيع' : 'Topics'}</Link>
                             <Link href="/gallery" className={styles.link}>{isAr ? 'المعرض' : 'Gallery'}</Link>
                         </nav>
                     </div>
