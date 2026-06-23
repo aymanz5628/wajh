@@ -112,7 +112,7 @@ export default {
       console.log('✅ Public API permissions set');
     }
 
-    // 1. Ensure Arabic locale is created/active
+    // 1. Ensure Arabic locale is created/active and set as default
     try {
       const localeService = strapi.plugin('i18n')?.service('locales');
       if (localeService) {
@@ -120,6 +120,22 @@ export default {
         if (!locales.some((l: any) => l.code === 'ar')) {
           console.log('🌐 Creating Arabic locale...');
           await localeService.create({ code: 'ar', name: 'Arabic (ar)' });
+        }
+
+        // Set Arabic as default locale in core store settings
+        const coreStore = strapi.db.query('strapi::core-store');
+        if (coreStore) {
+          const i18nDefault = await coreStore.findOne({
+            where: { key: 'plugin_i18n_default_locale' }
+          });
+
+          if (i18nDefault && i18nDefault.value !== JSON.stringify('ar')) {
+            console.log('🌐 Setting default i18n locale in core store to Arabic (ar)...');
+            await coreStore.update({
+              where: { key: 'plugin_i18n_default_locale' },
+              data: { value: JSON.stringify('ar') }
+            });
+          }
         }
       }
     } catch (e) {
