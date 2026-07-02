@@ -95,9 +95,28 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
       const bodyContent = doc.body.innerHTML;
       rawHtmlRef.current.innerHTML = bodyContent;
 
+      // ── تشغيل السكريبتات المحقونة من rawhtml ──
+      const injectedScripts = rawHtmlRef.current.querySelectorAll('script');
+      injectedScripts.forEach((oldScript) => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr =>
+          newScript.setAttribute(attr.name, attr.value)
+        );
+        newScript.textContent = oldScript.textContent;
+        oldScript.parentNode?.replaceChild(newScript, oldScript);
+      });
+
+      // ── إذا وُجد wdeck (النمط الجديد) لا نتدخل ──
+      const hasNewDeck = !!rawHtmlRef.current.querySelector('.wdeck, #wdeck, [id^="wdeck"]');
+      if (hasNewDeck) {
+        return () => {
+          document.querySelectorAll(`[data-raw-html-style="${styleId}"]`).forEach(el => el.remove());
+        };
+      }
+
+      // ── المنطق القديم للشرائح (.slide) ──
       const isRTL = rawHtml.includes('direction: rtl') || rawHtml.includes('dir="rtl"');
       const shareLabel = isRTL ? 'شارك' : 'SHARE';
-
       const currentUrl = encodeURIComponent(window.location.href);
       const title = encodeURIComponent(articleTitle || document.title);
       
@@ -129,11 +148,104 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
           if (slideContent && !slideContent.querySelector('.social-share-container')) {
             slideContent.insertAdjacentHTML('beforeend', socialShareHtml);
           }
+
+          if (slides.length > 1 && !rawHtmlRef.current?.querySelector('.slide-nav-container')) {
+            const presentationContainer = rawHtmlRef.current.querySelector('.presentation') || rawHtmlRef.current;
+            presentationContainer.classList.add('true-presentation-mode');
+            document.documentElement.classList.add('has-slides');
+            document.body.classList.add('has-slides');
+
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'slide-dots-container';
+            slides.forEach((_, idx) => {
+              const dot = document.createElement('button');
+              dot.className = `slide-dot ${idx === 0 ? 'active' : ''}`;
+              dot.setAttribute('aria-label', `Slide ${idx + 1}`);
+              dot.onclick = () => {
+                slides[idx].scrollIntoView({ behavior: 'smooth' });
+              };
+              dotsContainer.appendChild(dot);
+            });
+            presentationContainer.appendChild(dotsContainer);
+
+            const navContainer = document.createElement('div');
+            navContainer.className = 'slide-nav-container';
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'slide-nav-btn';
+            prevBtn.setAttribute('aria-label', isRTL ? 'الشريحة السابقة' : 'Previous Slide');
+            prevBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>';
+
+            const counter = document.createElement('span');
+            counter.className = 'slide-nav-counter';
+            counter.textContent = isRTL ? `١ / ${slides.length.toLocaleString('ar-EG')}` : `1 / ${slides.length}`;
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'slide-nav-btn';
+            nextBtn.setAttribute('aria-label', isRTL ? 'الشريحة التالية' : 'Next Slide');
+            nextBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>';
+
+            let currentIndex = 0;
+            const updateUI = (idx: number) => {
+              currentIndex = idx;
+              counter.textContent = isRTL ? `${(idx + 1).toLocaleString('ar-EG')} / ${slides.length.toLocaleString('ar-EG')}` : `${idx + 1} / ${slides.length}`;
+              prevBtn.disabled = idx === 0;
+              nextBtn.disabled = idx === slides.length - 1;
+              dotsContainer.querySelectorAll('.slide-dot').forEach((d, i) => {
+                if (i === idx) d.classList.add('active');
+                else d.classList.remove('active');
+              });
+            };
+
+            prevBtn.onclick = () => {
+              if (currentIndex > 0) slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            };
+            nextBtn.onclick = () => {
+              if (currentIndex < slides.length - 1) slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            };
+
+            const keyHandler = (e: KeyboardEvent) => {
+              if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentIndex < slides.length - 1) slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+              } else if (e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+              }
+            };
+            window.addEventListener('keydown', keyHandler);
+
+            navContainer.appendChild(prevBtn);
+            navContainer.appendChild(counter);
+            navContainer.appendChild(nextBtn);
+            presentationContainer.appendChild(navContainer);
+
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  const idx = Array.from(slides).indexOf(entry.target);
+                  if (idx !== -1) updateUI(idx);
+                }
+              });
+            }, { threshold: 0.5 });
+
+            slides.forEach((s) => observer.observe(s));
+
+            (rawHtmlRef.current as any)._slideCleanup = () => {
+              document.documentElement.classList.remove('has-slides');
+              document.body.classList.remove('has-slides');
+              window.removeEventListener('keydown', keyHandler);
+              observer.disconnect();
+            };
+          }
         }
       }, 100);
       
       return () => {
         document.querySelectorAll(`[data-raw-html-style="${styleId}"]`).forEach(el => el.remove());
+        if ((rawHtmlRef.current as any)?._slideCleanup) {
+          (rawHtmlRef.current as any)._slideCleanup();
+        }
       };
     }
   }, [shouldUseRawHtml, rawHtml, articleTitle]);
