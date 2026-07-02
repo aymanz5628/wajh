@@ -1,0 +1,190 @@
+<!-- قالب منصة وجه للعروض التفاعلية (Wajh Article Deck Template) -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap');
+*{box-sizing:border-box;}
+.wdeck{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;background:#05080f;font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;user-select:none;-webkit-user-select:none;}
+.wdeck-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3.5rem 2rem 5rem;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none;opacity:0;visibility:hidden;transform:translateY(60px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),visibility 0s linear .7s;will-change:opacity,transform;z-index:1;}
+.wdeck-slide::-webkit-scrollbar{display:none;}
+.wdeck-slide.active{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),visibility 0s linear 0s;z-index:10;}
+.wdeck-slide.leave-up{opacity:0;visibility:hidden;transform:translateY(-50px);transition:opacity .5s ease,transform .5s ease,visibility 0s linear .5s;z-index:5;}
+.wdeck-slide.leave-down{opacity:0;visibility:hidden;transform:translateY(50px);transition:opacity .5s ease,transform .5s ease,visibility 0s linear .5s;z-index:5;}
+.wdeck-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.wdeck-bg img{width:100%;height:100%;object-fit:cover;opacity:.2;filter:saturate(.7) brightness(.85);transform:scale(1.06);transition:transform 10s ease,opacity 1.2s ease;}
+.wdeck-slide.active .wdeck-bg img{transform:scale(1);opacity:.26;}
+.wdeck-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,15,.92) 0%,rgba(5,8,15,.35) 30%,rgba(5,8,15,.45) 65%,rgba(5,8,15,.97) 100%);}
+.wdeck-content{position:relative;z-index:2;max-width:860px;width:100%;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .6s ease .25s,transform .6s ease .25s;}
+.wdeck-slide.active .wdeck-content{opacity:1;transform:translateY(0);}
+.wdeck-tag{display:inline-flex;align-items:center;font-size:.76rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:30px;margin-bottom:1.3rem;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.28);color:#22d3ee;}
+.wdeck-tag.red{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.28);color:#f87171;}
+.wdeck-tag.gold{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.28);color:#fbbf24;}
+.wdeck-tag.white{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);color:#e2e8f0;}
+.wdeck-h1{font-size:clamp(2.4rem,6vw,4.5rem);font-weight:700;line-height:1.2;margin-bottom:1.3rem;background:linear-gradient(135deg,#fff 0%,#a8c4d4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.wdeck-h2{font-size:clamp(1.9rem,4.5vw,3.3rem);font-weight:700;line-height:1.28;margin-bottom:1.2rem;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.7);}
+.wdeck-p{font-size:clamp(1.05rem,1.9vw,1.3rem);line-height:2;color:#c2cedf;font-weight:300;margin-bottom:1.3rem;}
+.wdeck-p strong,.wdeck-p b{color:#fff;font-weight:600;}
+.wdeck-label{font-size:.76rem;font-weight:500;letter-spacing:3px;color:rgba(255,255,255,.32);text-transform:uppercase;margin-bottom:1.1rem;}
+.wdeck-sub{font-size:clamp(1.1rem,2.1vw,1.4rem);font-weight:300;color:rgba(255,255,255,.5);line-height:1.85;margin:0;}
+.wdeck-glass{background:rgba(10,18,36,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:1.5rem 1.7rem;margin:1.1rem 0;}
+.wdeck-glass p{font-size:clamp(1rem,1.85vw,1.25rem);line-height:2;color:#c2cedf;font-weight:300;margin:0;}
+.wdeck-glass p strong,.wdeck-glass p b{color:#fff;font-weight:600;}
+.wdeck-quote{border-right:3px solid #22d3ee;padding-right:1.3rem;margin:1.4rem 0;font-size:clamp(1.1rem,2.1vw,1.4rem);line-height:1.9;color:#dde6f0;font-style:italic;}
+.wdeck-quote.red{border-color:#f87171;}
+.wdeck-quote.gold{border-color:#fbbf24;color:#fbbf24;}
+.wdeck-bar{position:absolute;top:0;left:0;height:2.5px;background:linear-gradient(90deg,#22d3ee,#0ea5e9);box-shadow:0 0 10px rgba(34,211,238,.55);z-index:100;transition:width .6s cubic-bezier(.22,1,.36,1);border-radius:0 2px 2px 0;}
+.wdeck-nav{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:4px;background:rgba(8,14,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:50px;padding:5px 8px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 16px 45px rgba(0,0,0,.65);white-space:nowrap;}
+.wdeck-btn{width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,color .2s,transform .2s;flex-shrink:0;outline:none;-webkit-tap-highlight-color:transparent;font-size:20px;line-height:1;}
+.wdeck-btn:hover{background:rgba(34,211,238,.25);color:#22d3ee;transform:scale(1.12);}
+.wdeck-btn:active{transform:scale(.92);background:rgba(34,211,238,.35);}
+.wdeck-btn:disabled{opacity:.2;cursor:not-allowed;transform:none;}
+.wdeck-dots{display:flex;gap:5px;align-items:center;padding:0 6px;}
+.wdeck-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;transition:all .35s cubic-bezier(.22,1,.36,1);border:none;padding:0;flex-shrink:0;outline:none;}
+.wdeck-dot.on{background:#22d3ee;width:18px;border-radius:3px;box-shadow:0 0 8px rgba(34,211,238,.5);}
+.wdeck-num{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.38);padding:0 8px;min-width:50px;text-align:center;letter-spacing:.5px;}
+@media(max-width:768px){
+  .wdeck{min-height:100svh;}
+  .wdeck-slide{padding:3rem 1.2rem 5rem;}
+  .wdeck-dots{display:none;}
+  .wdeck-h1{font-size:clamp(2rem,9vw,3rem);}
+}
+</style>
+
+<div class="wdeck" id="wdeck">
+  <div class="wdeck-bar" id="wdeckBar"></div>
+
+  <!-- الشريحة الأولى (الغلاف) -->
+  <div class="wdeck-slide active">
+    <div class="wdeck-bg"><img src="رابط_الصورة" alt=""/></div>
+    <div class="wdeck-content">
+      <p class="wdeck-label">تحقيق وثائقي · منصة وجه</p>
+      <h1 class="wdeck-h1">عنوان المقال</h1>
+      <p class="wdeck-sub">العنوان الفرعي للمقال</p>
+    </div>
+  </div>
+
+  <!-- الشريحة الثانية -->
+  <div class="wdeck-slide">
+    <div class="wdeck-bg"><img src="رابط_الصورة" alt=""/></div>
+    <div class="wdeck-content">
+      <div class="wdeck-tag">الوسم</div>
+      <h2 class="wdeck-h2">عنوان الفقرة</h2>
+      <p class="wdeck-p">نص الفقرة هنا...</p>
+    </div>
+  </div>
+
+  <!-- أزرار التنقل -->
+  <nav class="wdeck-nav">
+    <button class="wdeck-btn" id="wdeckPrev" onclick="wdeckNav(-1)" disabled>&#8679;</button>
+    <div class="wdeck-dots" id="wdeckDots"></div>
+    <span class="wdeck-num" id="wdeckNum">1 / 2</span>
+    <button class="wdeck-btn" id="wdeckNext" onclick="wdeckNav(1)">&#8681;</button>
+  </nav>
+</div>
+
+<script>
+window._wdeck = { cur: 0, busy: false, LOCK: 620 };
+
+function wdeckNav(dir) {
+  wdeckGoTo(window._wdeck.cur + dir, dir);
+}
+
+function wdeckGoTo(idx, dir) {
+  var s = window._wdeck;
+  var deck = document.getElementById('wdeck');
+  if (!deck || s.busy) return;
+  var slides = Array.from(deck.querySelectorAll('.wdeck-slide'));
+  var N = slides.length;
+  if (idx === s.cur || idx < 0 || idx >= N) return;
+
+  s.busy = true;
+  var direction = (dir !== undefined) ? dir : (idx > s.cur ? 1 : -1);
+  var leaving = slides[s.cur];
+  var entering = slides[idx];
+
+  entering.style.transition = 'none';
+  entering.style.opacity = '0';
+  entering.style.visibility = 'visible';
+  entering.style.transform = direction > 0 ? 'translateY(50px)' : 'translateY(-50px)';
+  entering.getBoundingClientRect();
+  entering.style.transition = '';
+  entering.style.transform = 'translateY(0)';
+  entering.style.opacity = '1';
+
+  leaving.classList.remove('active');
+  leaving.classList.add(direction > 0 ? 'leave-up' : 'leave-down');
+  entering.classList.add('active');
+
+  s.cur = idx;
+
+  var bar = document.getElementById('wdeckBar');
+  var num = document.getElementById('wdeckNum');
+  var prevB = document.getElementById('wdeckPrev');
+  var nextB = document.getElementById('wdeckNext');
+  var dots = document.querySelectorAll('#wdeck .wdeck-dot');
+  if (bar) bar.style.width = ((idx + 1) / N * 100) + '%';
+  if (num) num.textContent = (idx + 1) + ' / ' + N;
+  if (prevB) prevB.disabled = idx === 0;
+  if (nextB) nextB.disabled = idx === N - 1;
+  dots.forEach(function(d, i) { d.classList.toggle('on', i === idx); });
+
+  setTimeout(function() {
+    leaving.classList.remove('leave-up', 'leave-down');
+    ['opacity','transform','transition','visibility'].forEach(function(p){
+      leaving.style[p] = '';
+      entering.style[p] = '';
+    });
+    entering.scrollTop = 0;
+    s.busy = false;
+  }, s.LOCK);
+}
+
+(function() {
+  var deck = document.getElementById('wdeck');
+  if (!deck) return;
+  var slides = Array.from(deck.querySelectorAll('.wdeck-slide'));
+  var N = slides.length;
+
+  var dotsC = document.getElementById('wdeckDots');
+  if (dotsC) {
+    slides.forEach(function(_, i) {
+      var d = document.createElement('button');
+      d.className = 'wdeck-dot' + (i === 0 ? ' on' : '');
+      d.onclick = function() { wdeckGoTo(i); };
+      dotsC.appendChild(d);
+    });
+  }
+
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowLeft')  { e.preventDefault(); wdeckGoTo(window._wdeck.cur + 1, 1);  }
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowRight') { e.preventDefault(); wdeckGoTo(window._wdeck.cur - 1, -1); }
+  });
+
+  var wt = null;
+  window.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    if (wt) return;
+    if (Math.abs(e.deltaY) > 10) {
+      wdeckGoTo(window._wdeck.cur + (e.deltaY > 0 ? 1 : -1), e.deltaY > 0 ? 1 : -1);
+      wt = setTimeout(function() { wt = null; }, window._wdeck.LOCK);
+    }
+  }, { passive: false });
+
+  var ty0 = 0, tx0 = 0;
+  window.addEventListener('touchstart', function(e) {
+    ty0 = e.touches[0].clientY;
+    tx0 = e.touches[0].clientX;
+  }, { passive: true });
+  window.addEventListener('touchend', function(e) {
+    var dy = ty0 - e.changedTouches[0].clientY;
+    var dx = tx0 - e.changedTouches[0].clientX;
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 45) {
+      wdeckGoTo(window._wdeck.cur + (dy > 0 ? 1 : -1), dy > 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  var bar = document.getElementById('wdeckBar');
+  if (bar) bar.style.width = (1 / N * 100) + '%';
+})();
+</script>
