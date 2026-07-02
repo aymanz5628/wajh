@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Home } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, use } from 'react';
 import ArticleHeader from '@/components/article/ArticleHeader';
@@ -8,7 +9,7 @@ import ArticleBody from '@/components/article/ArticleBody';
 import RelatedArticles from '@/components/article/RelatedArticles';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { getArticles } from '@/lib/data';
-import { fetchAPI, getAPIURL } from '@/lib/api';
+import { fetchAPI, getAPIURL, extractImageUrl } from '@/lib/api';
 
 export default function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = use(params);
@@ -57,8 +58,7 @@ export default function ArticlePage({ params }: { params: Promise<{ slug: string
                 if (articleData) {
                     const attr = articleData.attributes || articleData;
                     const cat = attr.category?.data?.attributes || attr.category || { name: t('category.general'), slug: 'general' };
-                    const imgData = attr.coverImage?.data?.attributes || attr.coverImage?.data || attr.coverImage || attr.image?.data?.attributes || attr.image?.data || attr.image;
-                    const imageUrl = imgData?.url ? getAPIURL(imgData.url) : defaultArticles[0].image;
+                    const imageUrl = extractImageUrl(attr.coverImage || attr.image || attr.cover) || defaultArticles[0].image;
 
                     setArticle({
                         title: attr.title || (language === 'ar' ? 'بدون عنوان' : 'Untitled'),
@@ -163,11 +163,12 @@ export default function ArticlePage({ params }: { params: Promise<{ slug: string
                     <RelatedArticles currentArticleSlug={slug} categorySlug={article.category?.slug} />
                 </div>
             )}
-            {article.useRawHtml && (
-                <Link href="/" className="immersive-back-button">
-                    {language === 'ar' ? 'العودة' : 'Back'}
-                </Link>
-            )}
+            <Link href="/" className="floating-home-button" aria-label={language === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}>
+                <span className="floating-home-icon">
+                    <Home size={18} />
+                </span>
+                <span className="floating-home-text">{language === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}</span>
+            </Link>
         </article>
     );
 }
