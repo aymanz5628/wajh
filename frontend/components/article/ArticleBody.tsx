@@ -72,6 +72,8 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
 
   useEffect(() => {
     if (shouldUseRawHtml && rawHtmlRef.current && rawHtml) {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
       const parser = new DOMParser();
       const doc = parser.parseFromString(rawHtml, 'text/html');
       
@@ -111,6 +113,10 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
       if (hasNewDeck) {
         return () => {
           document.querySelectorAll(`[data-raw-html-style="${styleId}"]`).forEach(el => el.remove());
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          document.documentElement.classList.remove('has-slides', 'immersive-mode');
+          document.body.classList.remove('has-slides', 'immersive-mode');
         };
       }
 
@@ -140,7 +146,10 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
         </div>
       `;
 
-      setTimeout(() => {
+      let keyHandler: ((e: KeyboardEvent) => void) | null = null;
+      let observer: IntersectionObserver | null = null;
+
+      const timerId = setTimeout(() => {
         const slides = rawHtmlRef.current?.querySelectorAll('.slide');
         if (slides && slides.length > 0) {
           const lastSlide = slides[slides.length - 1];
@@ -204,7 +213,7 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
               if (currentIndex < slides.length - 1) slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
             };
 
-            const keyHandler = (e: KeyboardEvent) => {
+            const currentKeyHandler = (e: KeyboardEvent) => {
               if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === ' ') {
                 e.preventDefault();
                 if (currentIndex < slides.length - 1) slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
@@ -213,14 +222,15 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
                 if (currentIndex > 0) slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
               }
             };
-            window.addEventListener('keydown', keyHandler);
+            keyHandler = currentKeyHandler;
+            window.addEventListener('keydown', currentKeyHandler);
 
             navContainer.appendChild(prevBtn);
             navContainer.appendChild(counter);
             navContainer.appendChild(nextBtn);
             presentationContainer.appendChild(navContainer);
 
-            const observer = new IntersectionObserver((entries) => {
+            const currentObserver = new IntersectionObserver((entries) => {
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                   const idx = Array.from(slides).indexOf(entry.target);
@@ -228,24 +238,22 @@ export default function ArticleBody({ content, image, rawHtml, useRawHtml, artic
                 }
               });
             }, { threshold: 0.5 });
+            observer = currentObserver;
 
-            slides.forEach((s) => observer.observe(s));
-
-            (rawHtmlRef.current as any)._slideCleanup = () => {
-              document.documentElement.classList.remove('has-slides');
-              document.body.classList.remove('has-slides');
-              window.removeEventListener('keydown', keyHandler);
-              observer.disconnect();
-            };
+            slides.forEach((s) => currentObserver.observe(s));
           }
         }
       }, 100);
       
       return () => {
+        clearTimeout(timerId);
         document.querySelectorAll(`[data-raw-html-style="${styleId}"]`).forEach(el => el.remove());
-        if ((rawHtmlRef.current as any)?._slideCleanup) {
-          (rawHtmlRef.current as any)._slideCleanup();
-        }
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.documentElement.classList.remove('has-slides', 'immersive-mode');
+        document.body.classList.remove('has-slides', 'immersive-mode');
+        if (keyHandler) window.removeEventListener('keydown', keyHandler);
+        if (observer) observer.disconnect();
       };
     }
   }, [shouldUseRawHtml, rawHtml, articleTitle]);
